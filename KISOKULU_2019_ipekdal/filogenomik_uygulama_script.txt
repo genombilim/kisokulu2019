@@ -1,0 +1,51 @@
+#TRUBA’ya baglan
+ssh egitim1@levrek1.ulakbim.gov.tr
+
+#password:
+e9it1m1
+
+#”KISOKULU” klasöründeki “filogenomik” klasörüne git
+cd KISOKULU/filogenomik/
+
+#Soyadinla bir klasör aç
+mkdir SOYADIN
+
+#Veri dosyalarini yeni açtigin klasöre kopyala
+cp /truba/home/egitim1/KISOKULU/BASH/IPEKDAL/filogeni/s_cerev_tef2.fas ~/KISOKULU/filogenomik/Klasörünüz/
+
+cp /truba/home/egitim1/KISOKULU/BASH/IPEKDAL/filogeni/blast_u.fas ~/KISOKULU/filogenomik/Klasörünüz/
+
+# Bash'e önceden yuklenen ve burada kullanacagimiz programlarin ulasilabilir hale gelmesi icin.
+source ~/.bashrc
+
+# Gen dosyasyi ile blast doyasini birlestir.
+cat s_cerev_tef2.fas blast_u.fas > merged.fas
+
+# Hizalama yap.
+muscle -in merged.fas -out muscle_out.aln
+
+# ÇALISTI MI? HATAYI BUL
+
+# merged.fas dosyasindaki bir “>” önceki diziye yapismis. Bunun yerini gör.
+vim merged.fas
+
+# "i" tusla, düzenlemeyi yap. Düzenleme: vim komutu kullanarak tüm blast_u.fas dosyasinin içerigini bir satir asagiya al.
+vim blast_u.fas
+
+# vim'de yaptigin degisiklikleri ":wq" komutu ile kaydet ve çik.
+
+# Simdi tekrar gen dosyasyi ile blast doyasini birlestir.
+cat s_cerev_tef2.fas blast_u.fas > merged.fas
+
+# Hizalama yap.
+muscle -in merged.fas -out muscle_out.aln
+
+# ML analizi yap.
+raxmlHPC -m GTRGAMMA -p 12345 -s muscle_out.aln -n yeast_tree
+
+# Yeni bir terminal pencere aç. Agaç dosyasini masaüstüne kopyala.
+scp egitim1@levrek1.ulakbim.gov.tr:/truba/home/egitim1/KISOKULU/filogenomik/klasörün/RAxML_bestTree.yeast_tree /home/mobaxterm/Desktop
+
+# Asagidaki adreste buluan çevrimiçi agaç yapma programini kullanarak agacini çiz. Agacinin farkli görünümlerini hazirla.
+https://itol.embl.de/ 
+https://itol.embl.de/upload.cgi
